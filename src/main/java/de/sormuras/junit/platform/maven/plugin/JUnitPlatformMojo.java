@@ -112,6 +112,9 @@ public class JUnitPlatformMojo extends AbstractMavenLifecycleParticipant impleme
   /** Custom version map to override detected version. */
   @Parameter private Map<String, String> versions = emptyMap();
 
+  /** Custom Launcher options. */
+  @Parameter private LauncherOptions launcherOptions = new LauncherOptions();
+
   /** The underlying Maven build model. */
   @Parameter(defaultValue = "${project.build}", readonly = true, required = true)
   private Build mavenBuild;
@@ -398,6 +401,12 @@ public class JUnitPlatformMojo extends AbstractMavenLifecycleParticipant impleme
             .setFilterTags(tags)
             // configuration parameters
             .setParameters(parameters)
+            .end()
+            .launcher()
+            .setTestEngineAutoRegistration(launcherOptions.testEngineAutoRegistration)
+            .setTestExecutionListenerAutoRegistration(
+                launcherOptions.testExecutionListenerAutoRegistration)
+            .setAdditionalTestEngines(launcherOptions.additionalTestEngines)
             .end();
 
     // No custom selector configured?
